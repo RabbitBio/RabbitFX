@@ -1,0 +1,7 @@
+.vscode
+.cquery*
+build
+io/back
+src_back
+CommandScreen.cpp
+*.swp
