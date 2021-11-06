@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(rabbitio)
+project(rabbitfx)
 #openmp
 find_package(OpenMP REQUIRED)
 if(OPENMP_FOUND)
@@ -46,10 +46,10 @@ add_executable (test Examples.cpp)
 #add_executable (RabbitIO ${SOURCE_LIST})
 
 target_link_libraries(test z)
-target_link_libraries(test rabbitio)
+target_link_libraries(test rabbitfx)
 
 target_link_libraries(testcount_pe z)
-target_link_libraries(testcount_pe rabbitio)
+target_link_libraries(testcount_pe rabbitfx)
 
 target_link_libraries(rabbitstat z)
-target_link_libraries(rabbitstat rabbitio)
+target_link_libraries(rabbitstat rabbitfx)

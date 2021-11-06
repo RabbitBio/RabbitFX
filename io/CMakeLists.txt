@@ -21,7 +21,5 @@ add_library(rabbitio ${SOURCE_LIST})
 #message(${SOURCE_LIST})
 #include_directories(.)
 
-#add_executable (RabbitIO ${SOURCE_LIST})
 
-target_link_libraries(rabbitio z)
-#target_link_libraries(RabbitIO)
+target_link_libraries(rabbitfx z)
