@@ -14,6 +14,13 @@ AUX_SOURCE_DIRECTORY(. SOURCE_LIST)
 ADD_LIBRARY(io_lib ${SOURCE_LIST})
 TARGET_LINK_LIBRAIES(io_lib z)
 ```
+### Using build libray
+```
+mkdir build
+cmake .. -DCMAKE_INSTALL_PREFIX=/your/install/path
+make && make install
+g++ -std=c++11 YOURFILE.cpp -I/your/install/path/include -L/your/install/path/lib -lrabbitfx -lz -lpthread
+```
 ## Highlight
  + RabbitFX highly support multi-core paltform
  + RabbitFX efficiency processing FASTQ/FASTA files
