@@ -1,4 +1,4 @@
-![RabbitFX](rabbitio.png)
+![RabbitFX](RabbitFX.png)
 
 # RabbitFX: an efficient I/O framework for sequencing data on modern multi-core platforms
 
