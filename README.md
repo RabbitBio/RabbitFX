@@ -1,6 +1,6 @@
 ![RabbitFX](RabbitFX.png)
 
-# RabbitFX: an efficient I/O framework for sequencing data on modern multi-core platforms
+# RabbitFX: Efficient Framework for FASTA/Q File Parsing on Modern Multi-Core Platforms
 
 ## Installation
 ### Dependency
