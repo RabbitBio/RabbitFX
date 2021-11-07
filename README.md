@@ -33,7 +33,7 @@ TARGET_LINK_LIBRAIES(io_lib z)
 
 
 ## Document
-Tutorial and reference documentation of RabbitFX are provided at [rabbitio-doc.readthedocs.io](https://rabbitio-doc.readthedocs.io/en/latest/index.html).
+Tutorial and reference documentation of RabbitFX are provided at [rabbitfx-doc.readthedocs.io](https://rabbitfx-doc.readthedocs.io/en/latest/index.html).
 
 ## Runing Example in main.cpp and TestCount.cpp
 
