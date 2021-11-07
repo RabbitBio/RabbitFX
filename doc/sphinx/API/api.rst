@@ -24,7 +24,7 @@ ChunkFormater
 -------------
 
 .. doxygenfile:: Formater.cpp
-  :project: RabbitIO
+  :project: RabbitFX
 
 Sequencing data
 ---------------

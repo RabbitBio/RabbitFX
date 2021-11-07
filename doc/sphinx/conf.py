@@ -33,8 +33,8 @@ import subprocess
 # ones.
 extensions = ['breathe']
 
-breathe_projects = {'RabbitIO': '.build/doxygenxml/'}
-breathe_default_project = 'RabbitIO'
+breathe_projects = {'RabbitFX': '.build/doxygenxml/'}
+breathe_default_project = 'RabbitFX'
 breathe_domain_by_extension = {'h': 'cpp'}
 
 # Add any paths that contain templates here, relative to this directory.
@@ -52,9 +52,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'RabbitIO'
-copyright = '2020, Zekun Yin et al.'
-author = 'Zekun Yin et al.'
+project = 'RabbitFX'
+copyright = '2020, Hao Zhang et al.'
+author = 'Hao Zhang et al.'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -226,7 +226,7 @@ html_static_path = ['_static']
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'RabbitIOdoc'
+htmlhelp_basename = 'RabbitFXdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -248,7 +248,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'RabbitIO.tex', 'RabbioIO Documentation',
+  (master_doc, 'RabbitFX.tex', 'RabbioIO Documentation',
    'Hao Zhang', 'manual'),
 ]
 
@@ -278,7 +278,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'RabbitIO', 'RabbitIO Documentation',
+    (master_doc, 'RabbitFX', 'RabbitFX Documentation',
      [author], 1)
 ]
 
@@ -292,8 +292,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, project, 'RabbitIO Documentation',
-   author, 'RabbitIO', 'A fast IO framework.',
+  (master_doc, project, 'RabbitFX Documentation',
+   author, 'RabbitFX', 'A fast IO framework.',
    'Miscellaneous'),
 ]
 

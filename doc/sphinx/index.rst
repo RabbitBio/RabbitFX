@@ -1,12 +1,12 @@
-.. RabbitIO document file
+.. RabbitFX document file
 
 |
 
-.. image:: rabbitio.png
+.. image:: RabbitFX.png
 
 |
 
-RabbitIO: an efficient I/O framework forsequencing data on modern multi-core platforms.
+RabbitFX: Efficient Framework for FASTA/Q File Parsing on Modern Multi-Core Platforms.
 =======================================================================================
 
 |

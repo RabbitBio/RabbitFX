@@ -1,7 +1,7 @@
 .. figure:: rabbitio.png
-   :alt: RabbitIO
+   :alt: RabbitFX
 
-RabbitIO Tutorial
+RabbitFX Tutorial
 =================
 
 Installation
@@ -16,7 +16,7 @@ Dependency
 Using Cmake (recommend) 
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Copy folder `io` to your program, and then you can integrate RabbitIO in your ``CMakeLists.txt``:
+Copy folder `io` to your program, and then you can integrate RabbitFX in your ``CMakeLists.txt``:
 
 .. code:: cmake
 
@@ -27,8 +27,8 @@ Copy folder `io` to your program, and then you can integrate RabbitIO in your ``
 Highlight
 ---------
 
--  RabbitIO highly support multi-core paltform
--  RabbitIO efficiency processing FASTQ/FASTA files
+-  RabbitFX highly support multi-core paltform
+-  RabbitFX efficiency processing FASTQ/FASTA files
 -  Concurrency data pool and data queue.
 -  Non-copy read format
 -  Bit-based sequencing processing
@@ -42,16 +42,16 @@ Illustration
 Case study
 ----------
 
--  `RabbitIO-Ktrim <https://github.com/RabbitBio/RabbitIO-Casestudy/tree/master/RabbitIO-Ktrim>`__
--  `RabbitIO-fastp <https://github.com/RabbitBio/RabbitIO-Casestudy/tree/master/RabbitIO-fastp>`__
--  `RabbitIO-Mash <https://github.com/RabbitBio/RabbitIO-Casestudy/tree/master/RabbitIO-Mash>`__
+-  `RabbitFX-Ktrim <https://github.com/RabbitBio/RabbitFX-Casestudy/tree/master/RabbitFX-Ktrim>`__
+-  `RabbitFX-fastp <https://github.com/RabbitBio/RabbitFX-Casestudy/tree/master/RabbitFX-fastp>`__
+-  `RabbitFX-Mash <https://github.com/RabbitBio/RabbitFX-Casestudy/tree/master/RabbitFX-Mash>`__
 
 Runing Example in main.cpp and TestCount.cpp
 --------------------------------------------
 
 .. code:: bash
 
-    cd RabbitIO
+    cd RabbitFX
     mkdir build && cd build
     cmake ..
     make
@@ -75,7 +75,7 @@ Single-end data processing example
   int test_fastq_se(int argc, char** argv){
     std::string file = "/home/old_home/haoz/workspace/QC/out_1.fq";
     //---------------cmd parser----------------
-    CLI::App app{"Wellcome to RabbitIO"};
+    CLI::App app{"Wellcome to RabbitFX"};
     CLI::Option* opt;
     std::string filename ;
     int th;
@@ -145,11 +145,11 @@ Pair-end data processing example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An example of processing Pair-end sequencing data is showed in file
-`TestCount.cpp <https://github.com/RabbitBio/RabbitIO/blob/master/TestCount.cpp>`__. It is tested that compared to
+`TestCount.cpp <https://github.com/RabbitBio/RabbitFX/blob/master/TestCount.cpp>`__. It is tested that compared to
 `FQReader <https://github.com/rob-p/FQFeeder>`__, in the task of
-counting ATCG of pair-end data, RabbitIO is 2 times faster in 20 thread.
+counting ATCG of pair-end data, RabbitFX is 2 times faster in 20 thread.
 
-RabbitIO is about 2G/s I/O speed now
+RabbitFX is about 2G/s I/O speed now
 
 FASTA data example
 ------------------
@@ -192,4 +192,4 @@ this is an example of reading and processing FASTA file
 Cite
 ----
 
-RabbitIO paper is under review now.
+RabbitFX paper is under review now.

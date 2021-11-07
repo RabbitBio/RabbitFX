@@ -1,13 +1,13 @@
-RabbitIO  Casestudies
+RabbitFX  Casestudies
 =====================
 
 
-`RabbitIO-Ktrim <https://github.com/RabbitBio/RabbitIO-Casestudy/tree/master/RabbitIO-Ktrim>`__
+`RabbitFX-Ktrim <https://github.com/RabbitBio/RabbitFX-Casestudy/tree/master/RabbitFX-Ktrim>`__
 -----------------------------------------------------------------------------------------------
 
-RabbitIO-Ktrim is an enhanced version of
+RabbitFX-Ktrim is an enhanced version of
 `Ktrim <https://github.com/hellosunking/Ktrim>`__ based on
-`RabbitIO <https://github.com/RabbitBio/RabbitIO>`__.
+`RabbitFX <https://github.com/RabbitBio/RabbitFX>`__.
 
 Installation
 ~~~~~~~~~~~~
@@ -16,8 +16,8 @@ you can re-compile the programs:
 
 .. code:: bash
 
-    git https://github.com/RabbitBio/RabbitIO-Casestudy.git
-    cd RabbitIO-Casestudy/RabbitIO-Ktrim
+    git https://github.com/RabbitBio/RabbitFX-Casestudy.git
+    cd RabbitFX-Casestudy/RabbitFX-Ktrim
     mkdir build
     cd build
     cmake ..
@@ -28,9 +28,9 @@ Usage
 
 .. code:: bash
 
-    Usage: RabbitIO-Ktrim [options] -1/-U Read1.fq [ -2 Read2.fq ] -o out.prefix
+    Usage: RabbitFX-Ktrim [options] -1/-U Read1.fq [ -2 Read2.fq ] -o out.prefix
 
-    RabbitIO-Ktrim is an enhanced version of Ktrim based on RabbitIO.
+    RabbitFX-Ktrim is an enhanced version of Ktrim based on RabbitFX.
 
     Compulsory parameters:
 
@@ -78,7 +78,7 @@ Usage
       -h/--help       Show this help information and quit
       -v/--version    Show the software version and quit
 
-    RabbitIO-Ktrim: enhanced extra-fast and accurate adapter- and quality-trimmer based on Ktrim.
+    RabbitFX-Ktrim: enhanced extra-fast and accurate adapter- and quality-trimmer based on Ktrim.
 
 Example 1
 ~~~~~~~~~
@@ -88,7 +88,7 @@ then you can run:
 
 .. code:: bash
 
-    ./RabbitIO-Ktrim -U /path/to/read1.fq -o /path/to/output/dir
+    ./RabbitFX-Ktrim -U /path/to/read1.fq -o /path/to/output/dir
 
 Example 2
 ~~~~~~~~~
@@ -101,7 +101,7 @@ threads to speed-up the analysis, then you can run:
 
 .. code:: bash
 
-    ./RabbitIO-Ktrim -1 /path/to/lane1.read1.fq.gz,/path/to/lane2.read1.fq.gz,/path/to/lane3.read1.fq \
+    ./RabbitFX-Ktrim -1 /path/to/lane1.read1.fq.gz,/path/to/lane2.read1.fq.gz,/path/to/lane3.read1.fq \
                       -2 /path/to/lane1.read2.fq.gz,/path/to/lane2.read2.fq.gz,/path/to/lane3.read2.fq \
                       -t 4 -p 35 -q 30 -s 50 -o /path/to/output/dir \
                       -a READ1_ADAPTER_SEQUENCE -b READ2_ADAPTER_SEQUENCE
@@ -110,21 +110,21 @@ threads to speed-up the analysis, then you can run:
 
 
 
-`RabbitIO-fastp <https://github.com/RabbitBio/RabbitIO-Casestudy/tree/master/RabbitIO-fastp>`__
+`RabbitFX-fastp <https://github.com/RabbitBio/RabbitFX-Casestudy/tree/master/RabbitFX-fastp>`__
 -----------------------------------------------------------------------------------------------
 
-RabbitIO-fastp is an enhanced version of
+RabbitFX-fastp is an enhanced version of
 `fastp <https://github.com/OpenGene/fastp>`__ based on
-`RabbitIO <https://github.com/RabbitBio/RabbitIO>`__.
+`RabbitFX <https://github.com/RabbitBio/RabbitFX>`__.
 
 Build
 ~~~~~
 
-we only provide the linux version of RabbitIO-fastp
+we only provide the linux version of RabbitFX-fastp
 
 .. code:: bash
 
-    cd RabbitIO-fastp && make
+    cd RabbitFX-fastp && make
 
 Simple usage
 ~~~~~~~~~~~~
@@ -133,20 +133,20 @@ Simple usage
 
    ::
 
-       RabbitIO-fastp -w nthreads -i in.fq -o out.fq
+       RabbitFX-fastp -w nthreads -i in.fq -o out.fq
 
 -  For paired end data
 
    ::
 
-       RabbitIO-fastp -w nthreads -i in.R1.fq -I in.R2.fq -o out.R1.fq -O out.R2.fq
+       RabbitFX-fastp -w nthreads -i in.R1.fq -I in.R2.fq -o out.R1.fq -O out.R2.fq
 
 
 
 
 
 
-`RabbitIO-Mash <https://github.com/RabbitBio/RabbitIO-Casestudy/tree/master/RabbitIO-Mash>`__
+`RabbitFX-Mash <https://github.com/RabbitBio/RabbitFX-Casestudy/tree/master/RabbitFX-Mash>`__
 -----------------------------------------------------------------------------------------------
 
 Build
@@ -163,7 +163,7 @@ Build
 
 .. code:: bash
 
-    cd RabbitIO-Mash
+    cd RabbitFX-Mash
     ./bootstrap.sh
     ./configure [--prefix=...] [--with-capnp=...] [--with-gsl=...] \
                 [--with-simd=yes/no]

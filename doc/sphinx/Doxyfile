@@ -1,4 +1,4 @@
-PROJECT_NAME           = RabbitIO
+PROJECT_NAME           = RabbitFX
 INPUT                  = ../../io
 RECURSIVE              = YES
 
