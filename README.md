@@ -11,8 +11,8 @@ Copy folder io to your program, and then
 you can integrate RabbitFX in your `CMakeLists.txt`:
 ```cmake
 AUX_SOURCE_DIRECTORY(. SOURCE_LIST)
-ADD_LIBRARY(io_lib ${SOURCE_LIST})
-TARGET_LINK_LIBRAIES(io_lib z)
+ADD_LIBRARY(rabbitfx ${SOURCE_LIST})
+TARGET_LINK_LIBRAIES(rabbitfx z)
 ```
 ### Using build libray
 ```
