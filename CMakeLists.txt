@@ -36,20 +36,17 @@ install(TARGETS "${PROJECT_NAME}"
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     )
-#message(${SOURCE_LIST})
-#include_directories(./src)
-#add_library(libio io )
 
-add_executable (testcount_pe TestCount.cpp) #se fastq 
-add_executable (rabbitstat RabbitStat.cpp) #se fastq 
-add_executable (test Examples.cpp)
-#add_executable (RabbitIO ${SOURCE_LIST})
-
-target_link_libraries(test z)
-target_link_libraries(test rabbitfx)
-
-target_link_libraries(testcount_pe z)
-target_link_libraries(testcount_pe rabbitfx)
-
-target_link_libraries(rabbitstat z)
-target_link_libraries(rabbitstat rabbitfx)
+#add_executable (testcount_pe TestCount.cpp) #se fastq 
+#add_executable (rabbitstat RabbitStat.cpp) #se fastq 
+#add_executable (test Examples.cpp)
+##add_executable (RabbitIO ${SOURCE_LIST})
+#
+#target_link_libraries(test z)
+#target_link_libraries(test rabbitfx)
+#
+#target_link_libraries(testcount_pe z)
+#target_link_libraries(testcount_pe rabbitfx)
+#
+#target_link_libraries(rabbitstat z)
+#target_link_libraries(rabbitstat rabbitfx)
