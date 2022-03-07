@@ -118,7 +118,7 @@ void consumer_fastq_task(rabbit::fq::FastqDataPool& fastqPool, rabbit::core::TDa
     long line_sum = 0;
     rabbit::int64 id = 0;
     std::vector<neoReference> data;
-	rabbit::fq::FastqDataChunk* fqdatachunk;// = new rabbit::fq::FastqDataChunk;
+    rabbit::fq::FastqDataChunk* fqdatachunk;// = new rabbit::fq::FastqDataChunk;
     data.resize(10000);
     while(dq.Pop(id, fqdatachunk)){
       line_sum += rabbit::fq::chunkFormat(fqdatachunk, data, true);
@@ -132,7 +132,7 @@ void consumer_fastq_task(rabbit::fq::FastqDataPool& fastqPool, rabbit::core::TDa
 ### Paired-end data processing example
 
 An example of processing paired-end sequencing data is showed in file [TestCount.cpp](./TestCount.cpp).
-It is tested that compared to [FQReader](https://github.com/rob-p/FQFeeder), in the task of counting ATCG of pair-end data, RabbitFX is 2 times faster in 20 thread.
+It is tested that compared to [FQFeeder](https://github.com/rob-p/FQFeeder), in the task of counting ATCG of pair-end data, RabbitFX is 2 times faster in 20 thread.
 
 RabbitFX is about 2G/s I/O speed now
 
@@ -147,8 +147,7 @@ int proces_fasta_task(std::string file) {
   int n_chunks = 0;
   int line_sum = 0;
   while (true) {
-    rabbit::fa::FastaChunk *fachunk = new rabbit::fa::FastaChunk;
-    fachunk = faFileReader.readNextChunkList();
+    rabbit::fa::FastaChunk *fachunk = faFileReader.readNextChunkList();
     if (fachunk == NULL) break;
     n_chunks++;
     //-----relaease
