@@ -21,6 +21,15 @@ cmake .. -DCMAKE_INSTALL_PREFIX=/your/install/path
 make && make install
 g++ -std=c++11 YOURFILE.cpp -I/your/install/path/include -L/your/install/path/lib -lrabbitfx -lz -lpthread
 ```
+### Build with libisal libray
++ step1: install [ISA-L](https://github.com/intel/isa-l) 
++ step2: build RabbitFx
+```
+mkdir build
+cmake .. -DCMAKE_INSTALL_PREFIX=/your/install/path -DIGZIP_PREFIX=/path/of/libisal 
+make && make install
+g++ -std=c++11 YOURFILE.cpp -I/your/install/path/include -L/your/install/path/lib -lrabbitfx -lz -lpthread
+```
 ## Highlight
  + RabbitFX highly support multi-core paltform
  + RabbitFX efficiency processing FASTQ/FASTA files
