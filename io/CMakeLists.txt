@@ -17,9 +17,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-O3 -g -ffast-math ${CMAKE_CXX_FLAGS}")
 
 aux_source_directory(. SOURCE_LIST)
-add_library(rabbitio ${SOURCE_LIST})
+add_library(rabbitfx ${SOURCE_LIST})
 #message(${SOURCE_LIST})
 #include_directories(.)
 
+#add_executable (RabbitIO ${SOURCE_LIST})
 
 target_link_libraries(rabbitfx z)
+#target_link_libraries(RabbitIO)

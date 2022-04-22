@@ -105,7 +105,7 @@ class Buffer {
  */
 struct DataChunk {
 	/// default swap buffer size
-  static const uint64 DefaultBufferSize = 1 << 20;  // 1 << 22
+  static const uint64 DefaultBufferSize = 1 << 22;  // 1 << 22
 
 	/// chunk data
   Buffer data;

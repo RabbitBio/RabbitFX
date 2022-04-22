@@ -13,6 +13,13 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}
 set(EXECUTABLE_OUTPUT_PATH .)
 endif()
 
+#----------IGZIP---------------#
+if(DEFINED IGZIP_PREFIX)
+	include_directories(${IGZIP_PREFIX}/include)
+	link_directories(${IGZIP_PREFIX}/lib)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_IGZIP -lisal")
+endif()
+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-O3 -g -ffast-math ${CMAKE_CXX_FLAGS}")
@@ -26,7 +33,7 @@ aux_source_directory(io DIR_SRCS)
 add_library("${PROJECT_NAME}" ${DIR_SRCS})
 target_link_libraries("${PROJECT_NAME}" z)
 
-install(FILES "io/Buffer.h"  "io/DataPool.h"   "io/FastxChunk.h"   "io/Formater.h"  "io/Reference.h"  "io/utils.h" "io/Common.h"  "io/DataQueue.h"  "io/FastxStream.h"  "io/Globals.h"   "io/util.h"
+install(FILES "io/Buffer.h"  "io/DataPool.h"   "io/FastxChunk.h"   "io/Formater.h"  "io/Reference.h"  "io/utils.h" "io/Common.h"  "io/DataQueue.h"  "io/FastxStream.h"  "io/Globals.h"   "io/util.h"  "io/FileReader.h"
   DESTINATION include
   )
 #install( FILES "build/io/librabbitio.a"
