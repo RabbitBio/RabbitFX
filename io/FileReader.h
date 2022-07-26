@@ -113,7 +113,36 @@ namespace rabbit{
 
             FileReader(int fd, bool isZipped = false){
                 if (isZipped) {
+#if defined(USE_IGZIP)
+                  mFile = fdopen(fd, "r");
+                  if (mFile == NULL)
+                  {
+                    cerr << "Can not open file id to read: " + to_string(fd) << endl;
+                  }
+                  mIgInbuf = new unsigned char[IGZIP_IN_BUF_SIZE];
+                  isal_gzip_header_init(&mIgzipHeader);
+                  isal_inflate_init(&mStream);
+                  mStream.crc_flag = ISAL_GZIP_NO_HDR_VER;
 
+                  mStream.next_in = mIgInbuf;
+                  mStream.avail_in = fread(mStream.next_in, 1, IGZIP_IN_BUF_SIZE, mFile);
+
+                  int ret = 0;
+                  ret = isal_read_gzip_header(&mStream, &mIgzipHeader);
+                  if (ret != ISAL_DECOMP_OK)
+                  {
+                    cerr << "error! invalid gzip header found!" << endl;
+                    if (mFile != NULL)
+                    {
+                      fclose(mFile);
+                    }
+                    exit(-1);
+                  }
+#else
+                  mZipFile = gzdopen(fd, "r");
+                  gzrewind(mZipFile);
+#endif
+                  this->isZipped = true;
                 } else {
                     mFile = FDOPEN(fd, "rb");
                     if (fd != -1) {

@@ -261,7 +261,7 @@ int chunkFormat(FastqChunk *fqChunk, std::vector<neoReference> &data, bool mHasQ
   return seq_count;
 }
 
-int chunkFormat(FastqDataChunk *fqDataChunk, std::vector<neoReference> &data, bool mHasQuality = true) {
+int chunkFormat(FastqDataChunk *fqDataChunk, std::vector<neoReference> &data) {
   FastqDataChunk *chunk = fqDataChunk;
   uint64_t seq_count = 0;
   uint64_t line_count = 0;
