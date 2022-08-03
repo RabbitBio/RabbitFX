@@ -61,7 +61,7 @@ class TDataPool {
 	 */
   TDataPool(uint32 maxPartNum_ = DefaultMaxPartNum, uint32 bufferPartSize_ = DefaultBufferPartSize)
       : maxPartNum(maxPartNum_), bufferPartSize(bufferPartSize_), partNum(0) {
-    if (bufferPartSize_ < DefaultBufferPartSize) cerr << "[warning]: your chunk buffer size maybe too small to hold one complete sequence!" << endl;
+    if (bufferPartSize_ < DefaultBufferPartSize) std::cerr << "[warning]: your chunk buffer size maybe too small to hold one complete sequence!" << std::endl;
     availablePartsPool.resize(maxPartNum);
     allocatedPartsPool.reserve(maxPartNum);
   }

@@ -234,7 +234,7 @@ void print_read(neoReference &ref) {
  * @param mHasQuality If the FASTQ data has quality infomation (default: true)
  * @return Total number of neoReference instance in vector `data`.
  */
-int chunkFormat(FastqChunk *fqChunk, std::vector<neoReference> &data, bool mHasQuality = true) {
+int chunkFormat(FastqChunk *fqChunk, std::vector<neoReference> &data) {
   FastqDataChunk *chunk = fqChunk->chunk;
   uint64_t seq_count = 0;
   uint64_t line_count = 0;

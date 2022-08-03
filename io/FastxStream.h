@@ -361,7 +361,8 @@ namespace rabbit {
                 FastqDataChunk *readNextChunk();
                 void readChunk();
                 bool ReadNextChunk_(FastqDataChunk *chunk_);
-                FastqDataPairChunk *readNextPairChunk();
+                FastqDataPairChunk *readNextPairChunk(); // two thread read paired file
+                FastqDataPairChunk *readNextPairChunk1(); // one thread read paried file
                 bool ReadNextPairedChunk_(FastqDataChunk *chunk_);
                 void Close() {
                     if (mFile != NULL) {
