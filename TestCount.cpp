@@ -29,7 +29,7 @@ int producer_pe_fastq_task(std::string file, std::string file2, rabbit::fq::Fast
   int line_sum = 0;
   while (true) {
     rabbit::fq::FastqPairChunk *fqchunk = new rabbit::fq::FastqPairChunk;
-    fqchunk->chunk = fqFileReader->readNextPairChunk();
+    fqchunk->chunk = fqFileReader->readNextPairChunk1();
     if (fqchunk->chunk == NULL) break;
     n_chunks++;
     //std::cout << "readed chunk: " << n_chunks << std::endl;
@@ -49,7 +49,7 @@ void consumer_pe_fastq_task(rabbit::fq::FastqDataPool *fastqPool, FqChunkQueue &
   while (dq.Pop(id, fqchunk->chunk)) {
 		std::vector<neoReference> data1;
 		data1.resize(10000);
-		rabbit::fq::chunkFormat((rabbit::fq::FastqDataChunk*)(fqchunk->chunk->left_part), data1, true);
+		rabbit::fq::chunkFormat((rabbit::fq::FastqDataChunk*)(fqchunk->chunk->left_part), data1);
 		for(neoReference &read : data1){
 			for(int i = 0; i < read.lseq; i++){
 				switch(read.base[read.pseq + i]){
@@ -66,7 +66,7 @@ void consumer_pe_fastq_task(rabbit::fq::FastqDataPool *fastqPool, FqChunkQueue &
 		}
 		std::vector<neoReference> data2;
 		data2.resize(10000);
-		rabbit::fq::chunkFormat((rabbit::fq::FastqDataChunk*)(fqchunk->chunk->right_part), data2, true);
+		rabbit::fq::chunkFormat((rabbit::fq::FastqDataChunk*)(fqchunk->chunk->right_part), data2);
 		for(neoReference &read : data2){
 			for(int i = 0; i < read.lseq; i++){
 				switch(read.base[read.pseq + i]){
@@ -87,10 +87,10 @@ void consumer_pe_fastq_task(rabbit::fq::FastqDataPool *fastqPool, FqChunkQueue &
 }
 
 int main(int argc, char **argv) {
-  std::string file1 = "/home/user_home/haoz/data/fastv_experiment_data/SRR1030141_1.fastq";
+  std::string file1 = std::string(argv[1]); //"/home/user_home/haoz/data/fastv_experiment_data/SRR1030141_1.fastq";
   //std::string file2 = "/home/old_home/haoz/ncbi/public/sra/mashscreen_test/ERR1711677_2.fastq";
-  std::string file2 = "/home/user_home/haoz/data/fastv_experiment_data/SRR1030141_2.fastq";
-  int th = std::stoi(argv[1]);  // thread number
+  std::string file2 = std::string(argv[2]); // "/home/user_home/haoz/data/fastv_experiment_data/SRR1030141_2.fastq";
+  int th = std::stoi(argv[3]);  // thread number
   rabbit::fq::FastqDataPool *fastqPool = new rabbit::fq::FastqDataPool(256, 1 << 22);
   FqChunkQueue queue1(128, 1);
   std::thread producer(producer_pe_fastq_task, file1, file2, fastqPool, std::ref(queue1));
