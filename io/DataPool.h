@@ -52,7 +52,7 @@ class TDataPool {
  public:
   volatile uint32 partNum;
   static const uint32 DefaultMaxPartNum = 32;
-  static const uint32 DefaultBufferPartSize = 1 << 22;
+  static const uint32 DefaultBufferPartSize = 1 << 23;
 
 	/**
 	 * @brief Constructor
@@ -61,6 +61,7 @@ class TDataPool {
 	 */
   TDataPool(uint32 maxPartNum_ = DefaultMaxPartNum, uint32 bufferPartSize_ = DefaultBufferPartSize)
       : maxPartNum(maxPartNum_), bufferPartSize(bufferPartSize_), partNum(0) {
+    if (bufferPartSize_ < DefaultBufferPartSize) cerr << "[warning]: your chunk buffer size maybe too small to hold one complete sequence!" << endl;
     availablePartsPool.resize(maxPartNum);
     allocatedPartsPool.reserve(maxPartNum);
   }
