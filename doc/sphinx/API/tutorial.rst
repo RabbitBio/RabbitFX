@@ -12,8 +12,9 @@ Dependency
 
 1. c++11
 2. `zlib <https://zlib.net/>`__ 
+3. `ISA-L <https://github.com/intel/isa-l>`__
    
-Using Cmake (recommend) 
+Using Cmake
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Copy folder `io` to your program, and then you can integrate RabbitFX in your ``CMakeLists.txt``:
@@ -21,8 +22,33 @@ Copy folder `io` to your program, and then you can integrate RabbitFX in your ``
 .. code:: cmake
 
   AUX_SOURCE_DIRECTORY(. SOURCE_LIST)
-  ADD_LIBRARY(io_lib ${SOURCE_LIST})
-  TARGET_LINK_LIBRAIES(io_lib z)
+  ADD_LIBRARY(rabbitfx ${SOURCE_LIST})
+  TARGET_LINK_LIBRAIES(rabbitfx z)
+
+Using build libray
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: bash
+
+mkdir build
+cmake .. -DCMAKE_INSTALL_PREFIX=/your/install/path
+make && make install
+g++ -std=c++11 YOURFILE.cpp -I/your/install/path/include -L/your/install/path/lib -lrabbitfx -lz -lpthread
+
+
+Build with libisal libray for processing gziped file faster
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
++ step1: install [ISA-L](https://github.com/intel/isa-l) 
+
++ step2: build RabbitFX
+.. code:: bash
+
+mkdir build
+cmake .. -DCMAKE_INSTALL_PREFIX=/your/install/path -DIGZIP_PREFIX=/path/to/libisal
+make && make install
+g++ -std=c++11 YOURFILE.cpp -I/your/install/path/include -L/your/install/path/lib -lrabbitfx -lz -lpthread
 
 Highlight
 ---------
@@ -132,10 +158,10 @@ Single-end data processing example
       long line_sum = 0;
       rabbit::int64 id = 0;
       std::vector<neoReference> data;
-  	rabbit::fq::FastqDataChunk* fqdatachunk;// = new rabbit::fq::FastqDataChunk;
+      rabbit::fq::FastqDataChunk* fqdatachunk;// = new rabbit::fq::FastqDataChunk;
       data.resize(10000);
       while(dq.Pop(id, fqdatachunk)){
-        line_sum += rabbit::fq::chunkFormat(fqdatachunk, data, true);
+        line_sum += rabbit::fq::chunkFormat(fqdatachunk, data);
         fastqPool->Release(fqdatachunk);
       }
       std::cout << "line_sum: " << line_sum << std::endl;

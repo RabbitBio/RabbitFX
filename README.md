@@ -6,6 +6,7 @@
 ### Dependency
  1. c++11
  2. [zlib](https://zlib.net/)
+ 3. [ISA-L](https://github.com/intel/isa-l) (optional)
 
 
 ### 1. Using Cmake
@@ -26,7 +27,7 @@ g++ -std=c++11 YOURFILE.cpp -I/your/install/path/include -L/your/install/path/li
 
 ### Build with libisal libray for processing gziped file faster
 + step1: install [ISA-L](https://github.com/intel/isa-l) 
-+ step2: build RabbitFx
++ step2: build RabbitFX
 ```
 mkdir build
 cmake .. -DCMAKE_INSTALL_PREFIX=/your/install/path -DIGZIP_PREFIX=/path/to/libisal
@@ -134,7 +135,7 @@ void consumer_fastq_task(rabbit::fq::FastqDataPool& fastqPool, rabbit::core::TDa
     rabbit::fq::FastqDataChunk* fqdatachunk;// = new rabbit::fq::FastqDataChunk;
     data.resize(10000);
     while(dq.Pop(id, fqdatachunk)){
-      line_sum += rabbit::fq::chunkFormat(fqdatachunk, data, true);
+      line_sum += rabbit::fq::chunkFormat(fqdatachunk, data);
       fastqPool.Release(fqdatachunk);
     }
     std::cout << "line_sum: " << line_sum << std::endl;
