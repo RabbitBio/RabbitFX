@@ -30,34 +30,35 @@ Using build libray
 
 .. code:: bash
 
-mkdir build
-cmake .. -DCMAKE_INSTALL_PREFIX=/your/install/path
-make && make install
-g++ -std=c++11 YOURFILE.cpp -I/your/install/path/include -L/your/install/path/lib -lrabbitfx -lz -lpthread
+  mkdir build
+  cmake .. -DCMAKE_INSTALL_PREFIX=/your/install/path
+  make && make install
+  g++ -std=c++11 YOURFILE.cpp -I/your/install/path/include -L/your/install/path/lib -lrabbitfx -lz -lpthread
 
 
 Build with libisal libray for processing gziped file faster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-+ step1: install [ISA-L](https://github.com/intel/isa-l) 
++ step1: install `ISA-L <https://github.com/intel/isa-l>`__ 
 
 + step2: build RabbitFX
+
 .. code:: bash
 
-mkdir build
-cmake .. -DCMAKE_INSTALL_PREFIX=/your/install/path -DIGZIP_PREFIX=/path/to/libisal
-make && make install
-g++ -std=c++11 YOURFILE.cpp -I/your/install/path/include -L/your/install/path/lib -lrabbitfx -lz -lpthread
+  mkdir build
+  cmake .. -DCMAKE_INSTALL_PREFIX=/your/install/path -DIGZIP_PREFIX=/path/to/libisal
+  make && make install
+  g++ -std=c++11 YOURFILE.cpp -I/your/install/path/include -L/your/install/path/lib -lrabbitfx -lz -lpthread
 
 Highlight
 ---------
 
--  RabbitFX highly support multi-core paltform
--  RabbitFX efficiency processing FASTQ/FASTA files
--  Concurrency data pool and data queue.
--  Non-copy read format
--  Bit-based sequencing processing
+  -  RabbitFX highly support multi-core paltform
+  -  RabbitFX efficiency processing FASTQ/FASTA files
+  -  Concurrency data pool and data queue.
+  -  Non-copy read format
+  -  Bit-based sequencing processing
 
 Illustration
 ------------
@@ -68,9 +69,9 @@ Illustration
 Case study
 ----------
 
--  `RabbitFX-Ktrim <https://github.com/RabbitBio/RabbitFX-Casestudy/tree/master/RabbitFX-Ktrim>`__
--  `RabbitFX-fastp <https://github.com/RabbitBio/RabbitFX-Casestudy/tree/master/RabbitFX-fastp>`__
--  `RabbitFX-Mash <https://github.com/RabbitBio/RabbitFX-Casestudy/tree/master/RabbitFX-Mash>`__
+  -  `RabbitFX-Ktrim <https://github.com/RabbitBio/RabbitFX-Casestudy/tree/master/RabbitFX-Ktrim>`__
+  -  `RabbitFX-fastp <https://github.com/RabbitBio/RabbitFX-Casestudy/tree/master/RabbitFX-fastp>`__
+  -  `RabbitFX-Mash <https://github.com/RabbitBio/RabbitFX-Casestudy/tree/master/RabbitFX-Mash>`__
 
 Runing Example in main.cpp and TestCount.cpp
 --------------------------------------------
