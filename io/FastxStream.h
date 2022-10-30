@@ -71,7 +71,7 @@ namespace rabbit {
                 /// Swap buffer size (16M default)
                 static const uint32 SwapBufferSize = 1 << 26;  // 16MB
                 /// Fasta data data pool
-                FastaDataPool &recordsPool;
+                FastaDataPool *recordsPool;
 
             public:
                 /*
@@ -81,7 +81,7 @@ namespace rabbit {
                  * @param halo size
                  * @param isZippedNew if true, it will use gzopen to read fileName_
                  */
-                FastaFileReader(const std::string &fileName_, FastaDataPool &pool_, uint64 halo = 21, bool isZippedNew = false)
+                FastaFileReader(const std::string &fileName_, FastaDataPool *pool_, uint64 halo = 21, bool isZippedNew = false)
                     : swapBuffer(SwapBufferSize),
                     bufferSize(0),
                     eof(false),
@@ -112,7 +112,7 @@ namespace rabbit {
                  * @param halo halo size
                  * @param isZippedNew if true, it will use gzopen to read fileName_
                  */
-                FastaFileReader(int fd, FastaDataPool &pool_, uint64 halo = 21, bool isZippedNew = false)
+                FastaFileReader(int fd, FastaDataPool *pool_, uint64 halo = 21, bool isZippedNew = false)
                     : swapBuffer(SwapBufferSize),
                     bufferSize(0),
                     eof(false),

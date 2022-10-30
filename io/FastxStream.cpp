@@ -25,13 +25,13 @@ namespace rabbit {
           */
         FastaChunk *FastaFileReader::readNextChunk() {
             FastaDataChunk *part = NULL;
-            recordsPool.Acquire(part);
+            recordsPool->Acquire(part);
             FastaChunk *dataPart = new FastaChunk;
             dataPart->chunk = part;
             if (ReadNextChunk_(dataPart, this->seqInfos)) {
                 return dataPart;
             } else {
-                recordsPool.Release(part);
+                recordsPool->Release(part);
                 return NULL;
             }
         }
@@ -44,7 +44,7 @@ namespace rabbit {
          */
         FastaChunk *FastaFileReader::readNextChunkList() {
             FastaDataChunk *part = NULL;
-            recordsPool.Acquire(part);
+            recordsPool->Acquire(part);
             FastaChunk *dataPart = new FastaChunk;
             dataPart->chunk = part;
             FastaDataChunk *current = part;
@@ -54,18 +54,18 @@ namespace rabbit {
                 //FastaDataChunk *current = part;
                 while (continue_read) {
                     FastaDataChunk *append = NULL;
-                    recordsPool.Acquire(append);
+                    recordsPool->Acquire(append);
                     if (ReadNextFaChunk_(append, this->seqInfos, continue_read)) {
                         current->next = append;
                         current = append;
                     } else {
-                        recordsPool.Release(append);
+                        recordsPool->Release(append);
                         break;
                     }
                 }
                 return dataPart;
             } else {
-                recordsPool.Release(part);
+                recordsPool->Release(part);
                 return NULL;
             }
         }
