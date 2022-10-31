@@ -418,7 +418,6 @@ namespace rabbit {
             }
           }
           //------read left chunk end------//
-
           //-----------------read right chunk---------------------//
           uchar *data_right = rightPart->data.Pointer();
           uint64 cbufSize_right = rightPart->data.Size();

@@ -137,7 +137,6 @@ namespace rabbit {
                     }
 
                 ~FastaFileReader() {
-                    // std::cerr << "totalSeqs: " << this->totalSeqs << std::endl;
                     if (mFile != NULL || mZipFile != NULL) Close();
                     // delete mFile;
                     // delete mZipFile;
@@ -304,7 +303,7 @@ namespace rabbit {
                  * @param isZippedNew if true, it will use gzopen to read fileName_ and fileName2_
                  */
                 FastqFileReader(const std::string &fileName_, FastqDataPool &pool_,
-                        std::string fileName2_ = "", bool isZippedNew = false)
+                      bool isZippedNew = false, std::string fileName2_ = "")
                     : swapBuffer(SwapBufferSize),
                     swapBuffer2(SwapBufferSize),
                     bufferSize(0),
@@ -327,7 +326,7 @@ namespace rabbit {
                  * @param fileName2_ the second file descriptor if source file is pair-end sequence
                  * @param isZippedNew if true, it will use gzopen to read fd and fd2
                  */
-                FastqFileReader(int fd, FastqDataPool &pool_, int fd2 = -1, bool isZippedNew = false)
+                FastqFileReader(int fd, FastqDataPool &pool_, bool isZippedNew = false, int fd2 = -1)
                     : swapBuffer(SwapBufferSize),
                     swapBuffer2(SwapBufferSize),
                     bufferSize(0),

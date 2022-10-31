@@ -8,6 +8,7 @@
 #include "io/Formater.h"
 #include <sys/time.h>
 #include <cstdint>
+#include "io/RabbitFX.h"
 
 double get_time(){
     struct timeval tv;
@@ -43,15 +44,15 @@ int producer_pe_fastq_task(std::string file, std::string file2, rabbit::fq::Fast
 }
 */
 
-void consumer_pe_fastq_task(rabbit::fq::FastqDataPool *fastqPool, FqChunkQueue &dq, Counter *counter) {
+void consumer_pe_fastq_task(FXReader<FQ_PE> &m_reader, Counter *counter) {
   long line_sum = 0;
   rabbit::int64 id = 0;
   rabbit::fq::FastqPairChunk *fqchunk = new rabbit::fq::FastqPairChunk;
-  while (dq.Pop(id, fqchunk->chunk)) {
-		std::vector<neoReference> data1;
-		data1.resize(10000);
-		rabbit::fq::chunkFormat((rabbit::fq::FastqDataChunk*)(fqchunk->chunk->left_part), data1);
-		for(neoReference &read : data1){
+	std::vector<neoReference> data1, data2;
+  while (true) {
+    auto data = m_reader.get_formated_reads_nocp();
+    if(data.first.chunk_p == NULL || data.second.chunk_p == NULL) break;
+		for(neoReference &read : data.first.vec){
 			for(int i = 0; i < read.lseq; i++){
 				switch(read.base[read.pseq + i]){
 				case 'A':
@@ -65,10 +66,8 @@ void consumer_pe_fastq_task(rabbit::fq::FastqDataPool *fastqPool, FqChunkQueue &
 				}
 			}
 		}
-		std::vector<neoReference> data2;
-		data2.resize(10000);
-		rabbit::fq::chunkFormat((rabbit::fq::FastqDataChunk*)(fqchunk->chunk->right_part), data2);
-		for(neoReference &read : data2){
+    m_reader.reader_.release_chunk(data.first.chunk_p);
+		for(neoReference &read : data.second.vec){
 			for(int i = 0; i < read.lseq; i++){
 				switch(read.base[read.pseq + i]){
 				case 'A':
@@ -82,8 +81,7 @@ void consumer_pe_fastq_task(rabbit::fq::FastqDataPool *fastqPool, FqChunkQueue &
 				}
 			}
 		}
-    fastqPool->Release(fqchunk->chunk->left_part);
-    fastqPool->Release(fqchunk->chunk->right_part);
+    m_reader.reader_.release_chunk(data.second.chunk_p);
   }
 }
 
@@ -92,16 +90,15 @@ int main(int argc, char **argv) {
   //std::string file2 = "/home/old_home/haoz/ncbi/public/sra/mashscreen_test/ERR1711677_2.fastq";
   std::string file2 = std::string(argv[2]); // "/home/user_home/haoz/data/fastv_experiment_data/SRR1030141_2.fastq";
   int th = std::stoi(argv[3]);  // thread number
-  rabbit::fq::FastqDataPool *fastqPool = new rabbit::fq::FastqDataPool(256, 1 << 22);
-  FqChunkQueue queue1(128, 1);
-  std::thread producer(producer_pe_fastq_task, file1, file2, fastqPool, std::ref(queue1));
-  std::thread **threads = new std::thread *[th];
+  
+  FXReader<FQ_PE> m_reader(file1, file2);
 	Counter* counters[th];
+  std::thread** threads = new thread*[th];
   for (int t = 0; t < th; t++) {
 		counters[t] = new Counter{0,0,0,0};
-    threads[t] = new std::thread(std::bind(consumer_pe_fastq_task, fastqPool, std::ref(queue1), counters[t]));
+    threads[t] = new std::thread(std::bind(consumer_pe_fastq_task, std::ref(m_reader), counters[t]));
   }
-  producer.join();
+  m_reader.join_producer();
   for (int t = 0; t < th; t++) {
     threads[t]->join();
   }
@@ -113,11 +110,6 @@ int main(int argc, char **argv) {
 		cg += counters[t]->G;
 	}
 	std::cout << ca << " " << ct << " " << cc << " " << cg << std::endl;
- 
-  delete fastqPool;
-  for (int t = 0; t < th; t++) {
-    delete threads[t];
-  }
   return 0;
 }
 // pcmode(){

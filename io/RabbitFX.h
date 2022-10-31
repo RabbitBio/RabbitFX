@@ -2,22 +2,95 @@
 #include "./FastxChunk.h"
 #include "assert.h"
 
-class FQ{
-typedef rabbit::core::TDataQueue<rabbit::fq::FastqDataPairChunk> FqChunkQueue;  
+struct FM_NEOREF{  //formated neoReference data structure (for format result)
+  std::vector<neoReference> vec;
+  rabbit::fq::FastqDataChunk *chunk_p;
+};
+
+class FQ_SE{
+typedef rabbit::core::TDataQueue<rabbit::fq::FastqDataChunk> FqChunkQueue;  
 typedef rabbit::fq::FastqDataPool FqDataPool;
+typedef vector<Reference> FDTYPE; //formated type
+typedef FM_NEOREF FDTYPE_NCP;     //formated type no-copy
 private:
   rabbit::fq::FastqFileReader* fqFileReader;
   FqDataPool* dp_;
   FqChunkQueue* dq_;
 public:
-  FQ(std::string file1, std::string file2){
+  FQ_SE(std::string file1){
     dq_ = new  FqChunkQueue(128, 1); // data queue
     dp_ = new FqDataPool(256, 1 << 22); // data pool
-    fqFileReader = new rabbit::fq::FastqFileReader(file1, *dp_, file2, false);
+    fqFileReader = new rabbit::fq::FastqFileReader(file1, *dp_, false);
+  }
+  void start_producer(bool is_pe){
+    std::thread producer([&] {
+      int n_chunks = 0;
+      while (true) {
+        rabbit::fq::FastqChunk  *fqchunk;// = new rabbit::fq::FastqPairChunk;
+        fqchunk->chunk = fqFileReader->readNextChunk();
+        if (fqchunk->chunk == NULL) break;
+        n_chunks++;
+        dq_->Push(n_chunks, fqchunk->chunk);
+      }
+
+      dq_->SetCompleted();
+    });
+  }
+  int get_formated_reads(vector<Reference> &data) {
+    rabbit::fq::FastqChunk *fqchunk;  
+    rabbit::int64 id = 0;
+    int ref_num;
+    if (dq_->Pop(id, fqchunk->chunk)) {
+      ref_num = rabbit::fq::chunkFormat(fqchunk->chunk, data, true);
+      //------------------relaease-----------------//
+      release_chunk(fqchunk);
+    }else{
+      ref_num = 0;
+    }
+    return ref_num;
+  }
+  FM_NEOREF get_formated_reads_nocp() {    
+    rabbit::fq::FastqChunk *fqchunk;  
+    rabbit::int64 id = 0;
+    int ref_num = 0;
+    FM_NEOREF data;
+    if (dq_->Pop(id, fqchunk->chunk)) {
+      ref_num = rabbit::fq::chunkFormat(fqchunk, data.vec);
+      data.chunk_p = fqchunk->chunk;
+    }
+    return data;
+  }
+  void release_chunk(rabbit::fq::FastqChunk *fqchunk){
+    //------------------relaease-----------------//
+    rabbit::fq::FastqDataChunk *tmp = fqchunk->chunk;
+    dp_->Release(tmp);
+  }
+
+  ~FQ_SE(){
+    delete fqFileReader;
+    delete dp_;
+    delete dq_;
+  }
+};
+class FQ_PE{
+  typedef rabbit::core::TDataQueue<rabbit::fq::FastqDataPairChunk> FqChunkQueue;  
+  typedef rabbit::fq::FastqDataPool FqDataPool;
+public:  
+  std::thread* producer_;
+  rabbit::fq::FastqFileReader* fqFileReader;
+  FqDataPool* dp_;
+  FqChunkQueue* dq_;
+public:
+  typedef std::pair<std::vector<Reference>, std::vector<Reference> > FDTYPE;
+  typedef std::pair<FM_NEOREF, FM_NEOREF> FDTYPE_NCP;     //formated type no-copy
+  FQ_PE(std::string file1, std::string file2){
+    dq_ = new  FqChunkQueue(128, 1); // data queue
+    dp_ = new FqDataPool(256, 1 << 24); // data pool
+    fqFileReader = new rabbit::fq::FastqFileReader(file1, *dp_, false, file2);
     //start_producer();
   }
   void start_producer(){
-    std::thread producer([&] {
+    producer_ = new std::thread([&] {
       int n_chunks = 0;
       while (true) {
         rabbit::fq::FastqPairChunk *fqchunk = new rabbit::fq::FastqPairChunk;
@@ -30,30 +103,57 @@ public:
       dq_->SetCompleted();
     }); 
   }
-  template <typename REFTYPE>
-  int get_formated_reads(vector<REFTYPE> &data) {
-    rabbit::fq::FastqChunk *fqchunk;  // = new rabbit::fa::FastaChunk;
+  FDTYPE get_formated_reads() {
+    rabbit::fq::FastqPairChunk *fqchunk;
     rabbit::int64 id = 0;
-    int ref_num;
-    if (dq_->Pop(id, fachunk)) {
-      // rabbit::fa::FastaDataChunk *tmp = fachunk->chunk;
-      ref_num = rabbit::fa::chunkFormat(*fachunk, data);
+    FDTYPE res_data;
+    vector<Reference> &left_data = res_data.first;
+    vector<Reference> &right_data = res_data.second;
+    int ref_num_l, ref_num_r;
+    if (dq_->Pop(id, fqchunk->chunk)) {
+      ref_num_l = rabbit::fq::chunkFormat(fqchunk->chunk->left_part, left_data, true);
+      ref_num_r = rabbit::fq::chunkFormat(fqchunk->chunk->right_part, right_data, true);
+      assert(ref_num_l == ref_num_r); //TODO: add failed info message
       //------------------relaease-----------------//
-      rabbit::fa::FastaDataChunk *tmp = fachunk->chunk;
-      do {
-        dp_->Release(tmp);
-        tmp = tmp->next;
-      } while (tmp != NULL);
+      release_chunk(fqchunk->chunk->left_part);
+      release_chunk(fqchunk->chunk->right_part);
     }else{
-      ref_num = 0;
+      ref_num_l = 0;
     }
-    return ref_num;
+    return res_data;
+  }
+  FDTYPE_NCP get_formated_reads_nocp() {
+    rabbit::fq::FastqPairChunk *fqchunk = new rabbit::fq::FastqPairChunk;
+    rabbit::int64 id = 0;
+    FDTYPE_NCP res_data;
+    vector<neoReference> &left_data = res_data.first.vec;
+    vector<neoReference> &right_data = res_data.second.vec;
+    int ref_num_l, ref_num_r;
+    if (dq_->Pop(id, fqchunk->chunk)) {
+      ref_num_l = rabbit::fq::chunkFormat((rabbit::fq::FastqDataChunk*)fqchunk->chunk->left_part, left_data);
+      ref_num_r = rabbit::fq::chunkFormat((rabbit::fq::FastqDataChunk*)fqchunk->chunk->right_part, right_data);
+      assert(ref_num_l == ref_num_r); //TODO: add failed info message
+      res_data.first.chunk_p = fqchunk->chunk->left_part;
+      res_data.second.chunk_p = fqchunk->chunk->right_part;
+    }else{
+      res_data.first.chunk_p = NULL;
+      res_data.second.chunk_p = NULL;
+      ref_num_l = 0;
+    }
+    return res_data;
+  }
+  void release_chunk(rabbit::fq::FastqDataChunk* fqchunk){
+    //rabbit::fq::FastqDataPairChunk *tmp = fqchunk->chunk;
+    //dp_->Release(tmp->left_part);
+    //dp_->Release(tmp->right_part);
+    dp_->Release(fqchunk);
   }
 
-  ~FQ(){
+  ~FQ_PE(){
     delete fqFileReader;
     delete dp_;
     delete dq_;
+    delete producer_;
   }
 };
 
@@ -61,6 +161,8 @@ class FA{
 typedef rabbit::core::TDataQueue<rabbit::fa::FastaChunk> FaChunkQueue;
 typedef rabbit::fa::FastaDataPool FaDataPool;
 public:
+  typedef int FDTYPE;
+  typedef int FDTYPE_NCP;
   rabbit::fa::FastaFileReader *faFileReader;
   FaDataPool* dp_;
   FaChunkQueue* dq_;
@@ -119,8 +221,7 @@ public:
     }
   }
 
-  template<typename REFTYPE>
-  int get_formated_reads(vector<REFTYPE>& data){
+  int get_formated_reads(vector<Reference>& data){
     rabbit::fa::FastaChunk *fachunk;  // = new rabbit::fa::FastaChunk;
     rabbit::int64 id = 0;
     int ref_num;
@@ -128,15 +229,19 @@ public:
       // rabbit::fa::FastaDataChunk *tmp = fachunk->chunk;
       ref_num = rabbit::fa::chunkFormat(*fachunk, data);
       //------------------relaease-----------------//
-      rabbit::fa::FastaDataChunk *tmp = fachunk->chunk;
-      do {
-        dp_->Release(tmp);
-        tmp = tmp->next;
-      } while (tmp != NULL);
+      release_chunk(fachunk);
     }else{
       ref_num = 0;
     }
     return ref_num;
+  }
+
+  void release_chunk(rabbit::fa::FastaChunk *fachunk) {
+    rabbit::fq::FastqDataChunk *tmp = fachunk->chunk;
+    do {
+      dp_->Release(tmp);
+      tmp = tmp->next;
+    } while (tmp != NULL);
   }
 
   ~FA(){
@@ -166,9 +271,11 @@ public:
  // bool pop_dq(rabbit::int64 &id, ){
  //   return reader_.dq_.Pop(id, chunk);
  // }
-  template<typename REFTYPE>
-  int get_formated_reads(vector<REFTYPE> &data){
-    return reader_.get_formated_reads(data);
+  typename T::FDTYPE get_formated_reads(){ // copy
+    return reader_.get_formated_reads();
+  }
+  typename T::FDTYPE_NCP get_formated_reads_nocp(){ //no copy 
+    return reader_.get_formated_reads_nocp();
   }
   void join_producer(){
     reader_.producer_->join();
