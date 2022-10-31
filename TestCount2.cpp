@@ -22,33 +22,11 @@ struct Counter{
 	uint64_t A, T, G, C;
 };
 
-/*
-int producer_pe_fastq_task(std::string file, std::string file2, rabbit::fq::FastqDataPool *fastqPool, FqChunkQueue &dq) {
-  rabbit::fq::FastqFileReader *fqFileReader;
-  fqFileReader = new rabbit::fq::FastqFileReader(file, *fastqPool, file2, false);
-  int n_chunks = 0;
-  int line_sum = 0;
-  while (true) {
-    rabbit::fq::FastqPairChunk *fqchunk = new rabbit::fq::FastqPairChunk;
-    fqchunk->chunk = fqFileReader->readNextPairChunk1();
-    if (fqchunk->chunk == NULL) break;
-    n_chunks++;
-    //std::cout << "readed chunk: " << n_chunks << std::endl;
-    dq.Push(n_chunks, fqchunk->chunk);
-  }
-
-  dq.SetCompleted();
-  delete fqFileReader;
-  std::cout << "file " << file << " has " << n_chunks << " chunks" << std::endl;
-  return 0;
-}
-*/
 
 void consumer_pe_fastq_task(FXReader<FQ_PE> &m_reader, Counter *counter) {
   long line_sum = 0;
   rabbit::int64 id = 0;
   rabbit::fq::FastqPairChunk *fqchunk = new rabbit::fq::FastqPairChunk;
-	std::vector<neoReference> data1, data2;
   while (true) {
     auto data = m_reader.get_formated_reads_nocp();
     if(data.first.chunk_p == NULL || data.second.chunk_p == NULL) break;
@@ -66,7 +44,6 @@ void consumer_pe_fastq_task(FXReader<FQ_PE> &m_reader, Counter *counter) {
 				}
 			}
 		}
-    m_reader.reader_.release_chunk(data.first.chunk_p);
 		for(neoReference &read : data.second.vec){
 			for(int i = 0; i < read.lseq; i++){
 				switch(read.base[read.pseq + i]){
@@ -81,7 +58,7 @@ void consumer_pe_fastq_task(FXReader<FQ_PE> &m_reader, Counter *counter) {
 				}
 			}
 		}
-    m_reader.reader_.release_chunk(data.second.chunk_p);
+		m_reader.release_chunk(data);
   }
 }
 

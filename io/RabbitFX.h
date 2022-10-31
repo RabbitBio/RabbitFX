@@ -43,7 +43,8 @@ public:
     if (dq_->Pop(id, fqchunk->chunk)) {
       ref_num = rabbit::fq::chunkFormat(fqchunk->chunk, data, true);
       //------------------relaease-----------------//
-      release_chunk(fqchunk);
+      //release_chunk(fqchunk);
+			dp_->Release(fqchunk->chunk);
     }else{
       ref_num = 0;
     }
@@ -60,10 +61,9 @@ public:
     }
     return data;
   }
-  void release_chunk(rabbit::fq::FastqChunk *fqchunk){
-    //------------------relaease-----------------//
-    rabbit::fq::FastqDataChunk *tmp = fqchunk->chunk;
-    dp_->Release(tmp);
+		//typedef FM_NEOREF FDTYPE_NCP;     //formated type no-copy
+  void release_chunk(FDTYPE_NCP &data){
+    dp_->Release(data.chunk_p);
   }
 
   ~FQ_SE(){
@@ -115,8 +115,8 @@ public:
       ref_num_r = rabbit::fq::chunkFormat(fqchunk->chunk->right_part, right_data, true);
       assert(ref_num_l == ref_num_r); //TODO: add failed info message
       //------------------relaease-----------------//
-      release_chunk(fqchunk->chunk->left_part);
-      release_chunk(fqchunk->chunk->right_part);
+      dp_->Release(fqchunk->chunk->left_part);
+      dp_->Release(fqchunk->chunk->right_part);
     }else{
       ref_num_l = 0;
     }
@@ -142,11 +142,10 @@ public:
     }
     return res_data;
   }
-  void release_chunk(rabbit::fq::FastqDataChunk* fqchunk){
-    //rabbit::fq::FastqDataPairChunk *tmp = fqchunk->chunk;
-    //dp_->Release(tmp->left_part);
-    //dp_->Release(tmp->right_part);
-    dp_->Release(fqchunk);
+
+  void release_chunk(FDTYPE_NCP &data){
+    dp_->Release(data.first.chunk_p);
+    dp_->Release(data.second.chunk_p);
   }
 
   ~FQ_PE(){
@@ -277,6 +276,9 @@ public:
   typename T::FDTYPE_NCP get_formated_reads_nocp(){ //no copy 
     return reader_.get_formated_reads_nocp();
   }
+	void release_chunk(typename T::FDTYPE_NCP& data){
+		reader_.release_chunk(data);
+	}
   void join_producer(){
     reader_.producer_->join();
   }
