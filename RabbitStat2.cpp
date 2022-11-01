@@ -32,7 +32,9 @@ void consumer_fasta_task(FXReader<FA> &m_reader, Counter *counter){
   std::unordered_map<uint64_t, uint64_t> &gid2len = counter->gid2len;
   std::unordered_map<uint64_t, std::string> &gid2name = counter->gid2name;
 
-  while ( (ref_num = m_reader.get_formated_reads(data)) != 0 ) {
+  while ( true ) {
+		auto data = m_reader.get_formated_reads();
+		if(data.size() == 0) break;
 		//rabbit::fa::FastaDataChunk *tmp = fachunk->chunk;
 		for(Reference &r: data){
 			gid2len[r.gid] += r.length;
@@ -54,7 +56,6 @@ void consumer_fasta_task(FXReader<FA> &m_reader, Counter *counter){
 				}
 			}
 		}
-    vector<Reference>().swap(data); 
   }
 }
 

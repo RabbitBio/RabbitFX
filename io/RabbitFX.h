@@ -20,7 +20,9 @@ public:
   FQ_SE(std::string file1){
     dq_ = new  FqChunkQueue(128, 1); // data queue
     dp_ = new FqDataPool(256, 1 << 22); // data pool
-    fqFileReader = new rabbit::fq::FastqFileReader(file1, *dp_, false);
+		bool zipped = false;
+		if(ends_with(file1, ".gz")) zipped = true;
+    fqFileReader = new rabbit::fq::FastqFileReader(file1, *dp_, zipped);
   }
   void start_producer(bool is_pe){
     std::thread producer([&] {
@@ -86,7 +88,9 @@ public:
   FQ_PE(std::string file1, std::string file2){
     dq_ = new  FqChunkQueue(128, 1); // data queue
     dp_ = new FqDataPool(256, 1 << 24); // data pool
-    fqFileReader = new rabbit::fq::FastqFileReader(file1, *dp_, false, file2);
+		bool zipped = false;
+		if(ends_with(file1, ".gz")) zipped = true;
+    fqFileReader = new rabbit::fq::FastqFileReader(file1, *dp_, zipped, file2);
     //start_producer();
   }
   void start_producer(){
@@ -160,8 +164,8 @@ class FA{
 typedef rabbit::core::TDataQueue<rabbit::fa::FastaChunk> FaChunkQueue;
 typedef rabbit::fa::FastaDataPool FaDataPool;
 public:
-  typedef int FDTYPE;
-  typedef int FDTYPE_NCP;
+  typedef vector<Reference> FDTYPE;
+  typedef vector<Reference> FDTYPE_NCP;
   rabbit::fa::FastaFileReader *faFileReader;
   FaDataPool* dp_;
   FaChunkQueue* dq_;
@@ -220,10 +224,11 @@ public:
     }
   }
 
-  int get_formated_reads(vector<Reference>& data){
+  vector<Reference> get_formated_reads(){
     rabbit::fa::FastaChunk *fachunk;  // = new rabbit::fa::FastaChunk;
     rabbit::int64 id = 0;
     int ref_num;
+		vector<Reference> data;
     if (dq_->Pop(id, fachunk)) {
       // rabbit::fa::FastaDataChunk *tmp = fachunk->chunk;
       ref_num = rabbit::fa::chunkFormat(*fachunk, data);
@@ -232,7 +237,7 @@ public:
     }else{
       ref_num = 0;
     }
-    return ref_num;
+    return data;
   }
 
   void release_chunk(rabbit::fa::FastaChunk *fachunk) {
