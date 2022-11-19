@@ -33,7 +33,7 @@ aux_source_directory(io DIR_SRCS)
 add_library("${PROJECT_NAME}" ${DIR_SRCS})
 target_link_libraries("${PROJECT_NAME}" z)
 
-install(FILES "io/Buffer.h"  "io/DataPool.h"   "io/FastxChunk.h"   "io/Formater.h"  "io/Reference.h"  "io/utils.h" "io/Common.h"  "io/DataQueue.h"  "io/FastxStream.h"  "io/Globals.h"   "io/util.h"  "io/FileReader.h"
+install(FILES "io/Buffer.h"  "io/DataPool.h"   "io/FastxChunk.h"   "io/Formater.h"  "io/Reference.h"  "io/utils.h" "io/Common.h"  "io/DataQueue.h"  "io/FastxStream.h"  "io/Globals.h"   "io/util.h"  "io/FileReader.h" "io/RabbitFX.h"
   DESTINATION include
   )
 #install( FILES "build/io/librabbitio.a"
