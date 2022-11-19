@@ -184,5 +184,4 @@ int test_fasta(int argc, char** argv){
 
 ## Cite
 
-RabbitFX paper is under review now.
-
+Zhang H, Song H, Xu X, Chang Q, Wang M, Wei Y, Yin Z, Schmidt B, Liu W. RabbitFX: Efficient Framework for FASTA/Q File Parsing on Modern Multi-Core Platforms. IEEE/ACM Trans Comput Biol Bioinform. 2022 Nov 3;PP. doi: 10.1109/TCBB.2022.3219114. Epub ahead of print. PMID: 36327193.
