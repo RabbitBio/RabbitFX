@@ -10,13 +10,14 @@ struct FM_NEOREF{  //formated neoReference data structure (for format result)
 class FQ_SE{
 typedef rabbit::core::TDataQueue<rabbit::fq::FastqDataChunk> FqChunkQueue;  
 typedef rabbit::fq::FastqDataPool FqDataPool;
-typedef vector<Reference> FDTYPE; //formated type
-typedef FM_NEOREF FDTYPE_NCP;     //formated type no-copy
 private:
+	std::thread* producer_;
   rabbit::fq::FastqFileReader* fqFileReader;
   FqDataPool* dp_;
   FqChunkQueue* dq_;
 public:
+	typedef vector<Reference> FDTYPE; //formated type
+	typedef FM_NEOREF FDTYPE_NCP;     //formated type no-copy
   FQ_SE(std::string file1){
     dq_ = new  FqChunkQueue(128, 1); // data queue
     dp_ = new FqDataPool(256, 1 << 22); // data pool
@@ -24,8 +25,8 @@ public:
 		if(ends_with(file1, ".gz")) zipped = true;
     fqFileReader = new rabbit::fq::FastqFileReader(file1, *dp_, zipped);
   }
-  void start_producer(bool is_pe){
-    std::thread producer([&] {
+  void start_producer(){
+    producer_ = new std::thread([&] {
       int n_chunks = 0;
       while (true) {
         rabbit::fq::FastqChunk  *fqchunk;// = new rabbit::fq::FastqPairChunk;
@@ -38,10 +39,11 @@ public:
       dq_->SetCompleted();
     });
   }
-  int get_formated_reads(vector<Reference> &data) {
+  FDTYPE get_formated_reads() {
     rabbit::fq::FastqChunk *fqchunk;  
     rabbit::int64 id = 0;
     int ref_num;
+		vector<Reference> data;
     if (dq_->Pop(id, fqchunk->chunk)) {
       ref_num = rabbit::fq::chunkFormat(fqchunk->chunk, data, true);
       //------------------relaease-----------------//
@@ -50,8 +52,9 @@ public:
     }else{
       ref_num = 0;
     }
-    return ref_num;
+    return data;
   }
+	
   FM_NEOREF get_formated_reads_nocp() {    
     rabbit::fq::FastqChunk *fqchunk;  
     rabbit::int64 id = 0;
