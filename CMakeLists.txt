@@ -44,15 +44,15 @@ install(TARGETS "${PROJECT_NAME}"
     ARCHIVE DESTINATION lib
     )
 
-add_executable (testcount_pe TestCount2.cpp) #pe fastq 
-add_executable (rabbitstat RabbitStat2.cpp) #fasta 
+#add_executable (testcount_pe TestCount2.cpp) #pe fastq 
+#add_executable (rabbitstat RabbitStat2.cpp) #fasta 
 #add_executable (test Examples.cpp)
 ##add_executable (RabbitIO ${SOURCE_LIST})
 #
 #target_link_libraries(test z)
 #target_link_libraries(test rabbitfx)
 #
-target_link_libraries(rabbitstat z)
-target_link_libraries(rabbitstat rabbitfx)
-target_link_libraries(testcount_pe z)
-target_link_libraries(testcount_pe rabbitfx)
+#target_link_libraries(rabbitstat z)
+#target_link_libraries(rabbitstat rabbitfx)
+#target_link_libraries(testcount_pe z)
+#target_link_libraries(testcount_pe rabbitfx)

@@ -11,16 +11,16 @@ class FQ_SE{
 typedef rabbit::core::TDataQueue<rabbit::fq::FastqDataChunk> FqChunkQueue;  
 typedef rabbit::fq::FastqDataPool FqDataPool;
 private:
-	std::thread* producer_;
   rabbit::fq::FastqFileReader* fqFileReader;
   FqDataPool* dp_;
   FqChunkQueue* dq_;
 public:
 	typedef vector<Reference> FDTYPE; //formated type
 	typedef FM_NEOREF FDTYPE_NCP;     //formated type no-copy
+	std::thread* producer_;
   FQ_SE(std::string file1){
     dq_ = new  FqChunkQueue(128, 1); // data queue
-    dp_ = new FqDataPool(256, 1 << 22); // data pool
+    dp_ = new FqDataPool(256, 1 << 24); // data pool
 		bool zipped = false;
 		if(ends_with(file1, ".gz")) zipped = true;
     fqFileReader = new rabbit::fq::FastqFileReader(file1, *dp_, zipped);
@@ -29,7 +29,7 @@ public:
     producer_ = new std::thread([&] {
       int n_chunks = 0;
       while (true) {
-        rabbit::fq::FastqChunk  *fqchunk;// = new rabbit::fq::FastqPairChunk;
+        rabbit::fq::FastqChunk  *fqchunk = new rabbit::fq::FastqChunk;
         fqchunk->chunk = fqFileReader->readNextChunk();
         if (fqchunk->chunk == NULL) break;
         n_chunks++;
@@ -40,7 +40,7 @@ public:
     });
   }
   FDTYPE get_formated_reads() {
-    rabbit::fq::FastqChunk *fqchunk;  
+    rabbit::fq::FastqChunk *fqchunk = new rabbit::fq::FastqChunk();  
     rabbit::int64 id = 0;
     int ref_num;
 		vector<Reference> data;
@@ -52,11 +52,12 @@ public:
     }else{
       ref_num = 0;
     }
+		delete fqchunk;
     return data;
   }
 	
   FM_NEOREF get_formated_reads_nocp() {    
-    rabbit::fq::FastqChunk *fqchunk;  
+    rabbit::fq::FastqChunk *fqchunk = new rabbit::fq::FastqChunk();   //TODO: it will become wild pointer!!!!
     rabbit::int64 id = 0;
     int ref_num = 0;
     FM_NEOREF data;
@@ -111,7 +112,7 @@ public:
     }); 
   }
   FDTYPE get_formated_reads() {
-    rabbit::fq::FastqPairChunk *fqchunk;
+    rabbit::fq::FastqPairChunk *fqchunk = new rabbit::fq::FastqPairChunk(); 
     rabbit::int64 id = 0;
     FDTYPE res_data;
     vector<Reference> &left_data = res_data.first;
@@ -127,10 +128,11 @@ public:
     }else{
       ref_num_l = 0;
     }
+		delete fqchunk;
     return res_data;
   }
   FDTYPE_NCP get_formated_reads_nocp() {
-    rabbit::fq::FastqPairChunk *fqchunk = new rabbit::fq::FastqPairChunk;
+    rabbit::fq::FastqPairChunk *fqchunk = new rabbit::fq::FastqPairChunk; //TODO: it will become wild pointer!!!!
     rabbit::int64 id = 0;
     FDTYPE_NCP res_data;
     vector<neoReference> &left_data = res_data.first.vec;
