@@ -190,8 +190,8 @@ public:
       int n_chunks = 0;
       while (true) {
         rabbit::fa::FastaChunk *fachunk;// = new rabbit::fa::FastaChunk;
-        // fachunk = faFileReader->readNextChunkList();
-        fachunk = faFileReader->readNextChunk();
+        fachunk = faFileReader->readNextChunkList();
+        //fachunk = faFileReader->readNextChunk();
         if (fachunk == NULL) break;
         n_chunks++;
         dq_->Push(n_chunks, fachunk);
@@ -236,7 +236,7 @@ public:
 		vector<Reference> data;
     if (dq_->Pop(id, fachunk)) {
       // rabbit::fa::FastaDataChunk *tmp = fachunk->chunk;
-      ref_num = rabbit::fa::chunkFormat(*fachunk, data);
+      ref_num = rabbit::fa::chunkListFormat(*fachunk, data);
       //------------------relaease-----------------//
       release_chunk(fachunk);
     }else{
