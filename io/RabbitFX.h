@@ -182,7 +182,9 @@ public:
     printf("in constuctor of FA!, fname: %s\n", file.c_str());
     dq_ = new  FaChunkQueue(128, 1); // data queue
     dp_ = new FaDataPool(256, 1 << 24); // data pool
-    faFileReader = new rabbit::fa::FastaFileReader(file, dp_, false);
+		bool zipped = false;
+		if(ends_with(file, ".gz")) zipped = true;
+    faFileReader = new rabbit::fa::FastaFileReader(file, dp_, zipped);
   }
 
   void start_producer() {

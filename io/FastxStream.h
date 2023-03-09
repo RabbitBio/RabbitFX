@@ -78,10 +78,10 @@ namespace rabbit {
                  * @brief FastaFileReader Constructor
                  * @param fileName_ Fasta file path
                  * @param pool_ Data pool
-                 * @param halo size
                  * @param isZippedNew if true, it will use gzopen to read fileName_
+                 * @param halo size
                  */
-                FastaFileReader(const std::string &fileName_, FastaDataPool *pool_, uint64 halo = 21, bool isZippedNew = false)
+                FastaFileReader(const std::string &fileName_, FastaDataPool *pool_, bool isZippedNew = false, uint64 halo = 21)
                     : swapBuffer(SwapBufferSize),
                     bufferSize(0),
                     eof(false),
@@ -109,10 +109,10 @@ namespace rabbit {
                  * @brief FastaFileReader Constructor
                  * @param fd Fasta file descriptor (if fasta file is opened)
                  * @param pool_ Data pool
-                 * @param halo halo size
                  * @param isZippedNew if true, it will use gzopen to read fileName_
+                 * @param halo halo size
                  */
-                FastaFileReader(int fd, FastaDataPool *pool_, uint64 halo = 21, bool isZippedNew = false)
+                FastaFileReader(int fd, FastaDataPool *pool_, bool isZippedNew = false, uint64 halo = 21)
                     : swapBuffer(SwapBufferSize),
                     bufferSize(0),
                     eof(false),
