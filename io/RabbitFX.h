@@ -248,7 +248,7 @@ public:
   }
 
   void release_chunk(rabbit::fa::FastaChunk *fachunk) {
-    rabbit::fq::FastqDataChunk *tmp = fachunk->chunk;
+    rabbit::fa::FastaDataChunk *tmp = fachunk->chunk;
     do {
       dp_->Release(tmp);
       tmp = tmp->next;
