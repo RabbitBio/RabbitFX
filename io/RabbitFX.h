@@ -1,3 +1,6 @@
+#ifndef RABBITFX_H
+#define RABBITFX_H
+
 #include "./FastxStream.h"
 #include "./FastxChunk.h"
 #include "assert.h"
@@ -300,3 +303,5 @@ public:
     }
   }
 };
+
+#endif
