@@ -15,7 +15,7 @@ you can integrate RabbitFX in your `CMakeLists.txt`:
 ```cmake
 AUX_SOURCE_DIRECTORY(. SOURCE_LIST)
 ADD_LIBRARY(rabbitfx ${SOURCE_LIST})
-TARGET_LINK_LIBRAIES(rabbitfx z)
+TARGET_LINK_LIBRARIES(rabbitfx z)
 ```
 ### 2. Using build libray
 ```
