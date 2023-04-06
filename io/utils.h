@@ -222,10 +222,12 @@ inline void seq_to_upper(std::string &seq){
 }
 
 }  // namespace core
+}  // namespace rabbit
 
 
-using namespace std;
+//using namespace std;
 
+namespace std{
 inline char complement(char base) {
   switch (base) {
     case 'A':
@@ -451,7 +453,6 @@ inline void loginfo(const string s) {
   cerr << "[" << t->tm_hour << ":" << t->tm_min << ":" << t->tm_sec << "] " << s << endl;
   logmtx.unlock();
 }
-
-}  // namespace rabbit
+} //namespace std
 
 #endif

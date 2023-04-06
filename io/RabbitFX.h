@@ -18,7 +18,7 @@ private:
   FqDataPool* dp_;
   FqChunkQueue* dq_;
 public:
-	typedef vector<Reference> FDTYPE; //formated type
+	typedef std::vector<Reference> FDTYPE; //formated type
 	typedef FM_NEOREF FDTYPE_NCP;     //formated type no-copy
 	std::thread* producer_;
   FQ_SE(std::string file1){
@@ -46,7 +46,7 @@ public:
     rabbit::fq::FastqChunk *fqchunk = new rabbit::fq::FastqChunk();  
     rabbit::int64 id = 0;
     int ref_num;
-		vector<Reference> data;
+		std::vector<Reference> data;
     if (dq_->Pop(id, fqchunk->chunk)) {
       ref_num = rabbit::fq::chunkFormat(fqchunk->chunk, data, true);
       //------------------relaease-----------------//
@@ -118,8 +118,8 @@ public:
     rabbit::fq::FastqPairChunk *fqchunk = new rabbit::fq::FastqPairChunk(); 
     rabbit::int64 id = 0;
     FDTYPE res_data;
-    vector<Reference> &left_data = res_data.first;
-    vector<Reference> &right_data = res_data.second;
+    std::vector<Reference> &left_data = res_data.first;
+    std::vector<Reference> &right_data = res_data.second;
     int ref_num_l, ref_num_r;
     if (dq_->Pop(id, fqchunk->chunk)) {
       ref_num_l = rabbit::fq::chunkFormat(fqchunk->chunk->left_part, left_data, true);
@@ -138,8 +138,8 @@ public:
     rabbit::fq::FastqPairChunk *fqchunk = new rabbit::fq::FastqPairChunk; //TODO: it will become wild pointer!!!!
     rabbit::int64 id = 0;
     FDTYPE_NCP res_data;
-    vector<neoReference> &left_data = res_data.first.vec;
-    vector<neoReference> &right_data = res_data.second.vec;
+    std::vector<neoReference> &left_data = res_data.first.vec;
+    std::vector<neoReference> &right_data = res_data.second.vec;
     int ref_num_l, ref_num_r;
     if (dq_->Pop(id, fqchunk->chunk)) {
       ref_num_l = rabbit::fq::chunkFormat((rabbit::fq::FastqDataChunk*)fqchunk->chunk->left_part, left_data);
@@ -172,8 +172,8 @@ class FA{
 typedef rabbit::core::TDataQueue<rabbit::fa::FastaChunk> FaChunkQueue;
 typedef rabbit::fa::FastaDataPool FaDataPool;
 public:
-  typedef vector<Reference> FDTYPE;
-  typedef vector<Reference> FDTYPE_NCP;
+  typedef std::vector<Reference> FDTYPE;
+  typedef std::vector<Reference> FDTYPE_NCP;
   rabbit::fa::FastaFileReader *faFileReader;
   FaDataPool* dp_;
   FaChunkQueue* dq_;
@@ -205,16 +205,16 @@ public:
     });
   }
   template<typename T>
-	void process_data_mt(const int tn, T (*func_ptr)(Reference &), vector<vector<T> > &v_res_data){ //tn means thread number
+	void process_data_mt(const int tn, T (*func_ptr)(Reference &), std::vector<std::vector<T> > &v_res_data){ //tn means thread number
 		consumers_ = new std::thread*[tn];
     assert(v_res_data.size() == tn);
     this->consumer_th_ = tn;
     for (int i = 0; i < tn; i++) {
       rabbit::int64 id = 0;
-      vector<T> &res_data = v_res_data[i];
+      std::vector<T> &res_data = v_res_data[i];
 
-      consumers_[i] = new thread([&]() {
-        cout << "starting worker: " << i << endl;
+      consumers_[i] = new std::thread([&]() {
+				//cout << "starting worker: " << i << endl;
         rabbit::fa::FastaChunk *fachunk;  // = new rabbit::fa::FastaChunk;
         while (dq_->Pop(id, fachunk)) {
           // rabbit::fa::FastaDataChunk *tmp = fachunk->chunk;
@@ -234,11 +234,11 @@ public:
     }
   }
 
-  vector<Reference> get_formated_reads(){
+  std::vector<Reference> get_formated_reads(){
     rabbit::fa::FastaChunk *fachunk;  // = new rabbit::fa::FastaChunk;
     rabbit::int64 id = 0;
     int ref_num;
-		vector<Reference> data;
+		std::vector<Reference> data;
     if (dq_->Pop(id, fachunk)) {
       // rabbit::fa::FastaDataChunk *tmp = fachunk->chunk;
       ref_num = rabbit::fa::chunkListFormat(*fachunk, data);
