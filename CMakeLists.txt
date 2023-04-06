@@ -33,7 +33,7 @@ aux_source_directory(io DIR_SRCS)
 add_library("${PROJECT_NAME}" ${DIR_SRCS})
 target_link_libraries("${PROJECT_NAME}" z)
 
-install(FILES "io/Buffer.h"  "io/DataPool.h"   "io/FastxChunk.h"   "io/Formater.h"  "io/Reference.h"  "io/utils.h" "io/Common.h"  "io/DataQueue.h"  "io/FastxStream.h"  "io/Globals.h"   "io/util.h"  "io/FileReader.h" "io/RabbitFX.h"
+install(FILES "io/Buffer.h"  "io/DataPool.h"   "io/FastxChunk.h"   "io/Formater.h"  "io/Reference.h"  "io/utils.h" "io/Common.h"  "io/DataQueue.h"  "io/FastxStream.h"  "io/Globals.h"  "io/FileReader.h" "io/RabbitFX.h"
   DESTINATION include
   )
 #install( FILES "build/io/librabbitio.a"
@@ -44,15 +44,17 @@ install(TARGETS "${PROJECT_NAME}"
     ARCHIVE DESTINATION lib
     )
 
-#add_executable (testcount_pe TestCount2.cpp) #pe fastq 
-#add_executable (rabbitstat RabbitStat2.cpp) #fasta 
+if(DEFINED TEST)
+#add_executable (testcount_pe TestCount2.cpp) #pe fastq
+add_executable (rabbitstat RabbitStat2.cpp) #fasta
 #add_executable (test Examples.cpp)
 ##add_executable (RabbitIO ${SOURCE_LIST})
 #
 #target_link_libraries(test z)
 #target_link_libraries(test rabbitfx)
 #
-#target_link_libraries(rabbitstat z)
-#target_link_libraries(rabbitstat rabbitfx)
+target_link_libraries(rabbitstat z)
+target_link_libraries(rabbitstat rabbitfx)
 #target_link_libraries(testcount_pe z)
 #target_link_libraries(testcount_pe rabbitfx)
+endif()
